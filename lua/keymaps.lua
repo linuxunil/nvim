@@ -1,4 +1,4 @@
--- lua/keymaps.lua (Clean - Core Editor Only)
+-- lua/keymaps.lua (Updated - removed mini.files, kept core editor only)
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
@@ -87,13 +87,16 @@ end, { desc = "Test output" })
 
 -- ===== NOTE =====
 -- Language-specific keymaps are now in their respective plugin files:
--- Go: lua/plugins/go.lua       -> <leader>go*
--- Python: lua/plugins/python.lua -> <leader>py*
--- Zig: lua/plugins/zig.lua     -> <leader>zg*
--- Markdown: lua/plugins/markdown.lua -> <leader>m*
--- Neorg: lua/plugins/neorg.lua -> <leader>n*
+-- Go: lua/plugins/lang/go.lua       -> <leader>go*
+-- Python: lua/plugins/lang/python.lua -> <leader>py*
+-- Zig: lua/plugins/lang/zig.lua     -> <leader>zg*
+-- Markdown: lua/plugins/notes/markdown.lua -> <leader>m*
+-- Neorg: lua/plugins/notes/neorg.lua -> <leader>n*
 
 -- Tool-specific keymaps are in their plugin files:
--- Terminal: lua/plugins/snacks.lua -> <leader>t*
--- Git: lua/plugins/snacks.lua -> <leader>g*
--- Debug: lua/plugins/debugging.lua -> <leader>d*
+-- File Explorer: lua/plugins/tools/snacks.lua -> <leader>e/E
+-- Terminal: lua/plugins/tools/snacks.lua -> <leader>t*
+-- Git: lua/plugins/tools/snacks.lua -> <leader>g*
+-- Debug: lua/plugins/core/debugging.lua -> <leader>d*
+-- Todo Comments: lua/plugins/tools/todo-comments.lua -> ]t/[t
+-- Which Key: lua/plugins/tools/which-key.lua -> help system

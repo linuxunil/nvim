@@ -1,4 +1,6 @@
--- lua/plugins/which-key.lua (Updated with new keymap scheme)
+-- lua/plugins/tools/which-key.lua - Keybinding Help System
+-- Shows available keybindings in a popup when you pause typing
+
 return {
 	{
 		"folke/which-key.nvim",
@@ -7,19 +9,23 @@ return {
 			local wk = require("which-key")
 
 			wk.setup({
-				plugins = { spelling = true },
-				win = { border = "rounded" },
+				plugins = {
+					spelling = true,
+				},
+				win = {
+					border = "rounded",
+				},
 			})
 
-			-- Register key mappings with new scheme
+			-- Register key mappings with new organized scheme
 			wk.add({
-				-- Single character prefixes
+				-- ===== SINGLE CHARACTER PREFIXES =====
 				{ "g", group = "goto" },
 				{ "gs", group = "surround" },
 				{ "]", group = "next" },
 				{ "[", group = "prev" },
 
-				-- Leader key groups
+				-- ===== CORE LEADER GROUPS =====
 				{ "<leader>b", group = "buffer" },
 				{ "<leader>c", group = "code" },
 				{ "<leader>d", group = "debug" },
@@ -35,17 +41,15 @@ return {
 				{ "<leader>w", group = "windows" },
 				{ "<leader>x", group = "diagnostics/quickfix" },
 
-				-- Language-specific groups (NEW SCHEME)
+				-- ===== LANGUAGE-SPECIFIC GROUPS =====
 				{ "<leader>go", group = "go" },
 				{ "<leader>py", group = "python" },
 				{ "<leader>zg", group = "zig" },
 
-				-- Sub-groups
+				-- ===== SUB-GROUPS =====
 				{ "<leader>dg", group = "debug go" },
-				{ "<leader>py", group = "python" },
-				{ "<leader>pye", desc = "Select Python environment" },
 
-				-- File/Find
+				-- ===== FILE/FIND =====
 				{ "<leader>ff", desc = "Find files" },
 				{ "<leader>fg", desc = "Live grep" },
 				{ "<leader>fb", desc = "Buffers" },
@@ -54,11 +58,11 @@ return {
 				{ "<leader>fc", desc = "Colorscheme" },
 				{ "<leader>fk", desc = "Keymaps" },
 
-				-- File explorer
-				{ "<leader>e", desc = "File explorer" },
-				{ "<leader>E", desc = "File explorer (cwd)" },
+				-- ===== FILE EXPLORER (Snacks) =====
+				{ "<leader>e", desc = "File Explorer" },
+				{ "<leader>E", desc = "File Explorer (cwd)" },
 
-				-- Buffer management (using snacks.nvim)
+				-- ===== BUFFER MANAGEMENT =====
 				{ "<leader>bd", desc = "Delete buffer" },
 				{ "<leader>bD", desc = "Delete buffer (force)" },
 				{ "<leader>bp", desc = "Toggle pin" },
@@ -67,13 +71,13 @@ return {
 				{ "<leader>br", desc = "Delete buffers to the right" },
 				{ "<leader>bl", desc = "Delete buffers to the left" },
 
-				-- Code
+				-- ===== CODE =====
 				{ "<leader>ca", desc = "Code actions" },
 				{ "<leader>cf", desc = "Format buffer" },
 				{ "<leader>cg", desc = "Generate docstring" },
 				{ "<leader>cR", desc = "Rename file" },
 
-				-- Debug
+				-- ===== DEBUG =====
 				{ "<leader>db", desc = "Toggle breakpoint" },
 				{ "<leader>dc", desc = "Continue" },
 				{ "<leader>dC", desc = "Run to cursor" },
@@ -90,7 +94,7 @@ return {
 				{ "<leader>dt", desc = "Terminate" },
 				{ "<leader>dw", desc = "Widgets" },
 
-				-- Git (unchanged)
+				-- ===== GIT =====
 				{ "<leader>gg", desc = "LazyGit" },
 				{ "<leader>gb", desc = "Git blame line" },
 				{ "<leader>gB", desc = "Git browse" },
@@ -99,7 +103,7 @@ return {
 				{ "<leader>gf", desc = "File history" },
 				{ "<leader>gl", desc = "Git log" },
 
-				-- Go specific (NEW SCHEME - <leader>go*)
+				-- ===== GO LANGUAGE (<leader>go*) =====
 				{ "<leader>gor", desc = "Run Go file" },
 				{ "<leader>goR", desc = "Run current Go file" },
 				{ "<leader>gob", desc = "Build Go project" },
@@ -128,7 +132,7 @@ return {
 				{ "<leader>gon", desc = "Switch to test file" },
 				{ "<leader>goN", desc = "Switch to test (vertical)" },
 
-				-- Python specific (NEW SCHEME - <leader>py*)
+				-- ===== PYTHON LANGUAGE (<leader>py*) =====
 				{ "<leader>pyr", desc = "Run Python file with UV" },
 				{ "<leader>pyt", desc = "Run tests with UV" },
 				{ "<leader>pyi", desc = "Install package with UV" },
@@ -142,7 +146,7 @@ return {
 				{ "<leader>pyS", desc = "Send file to REPL" },
 				{ "<leader>pym", desc = "Send marked text to REPL" },
 
-				-- Zig specific (NEW SCHEME - <leader>zg*)
+				-- ===== ZIG LANGUAGE (<leader>zg*) =====
 				{ "<leader>zgr", desc = "Run Zig file" },
 				{ "<leader>zgt", desc = "Test Zig file" },
 				{ "<leader>zgb", desc = "Build Zig project" },
@@ -150,26 +154,26 @@ return {
 				{ "<leader>zgc", desc = "Check Zig file" },
 				{ "<leader>zgi", desc = "Initialize Zig project" },
 
-				-- Terminal (using snacks.nvim)
+				-- ===== TERMINAL =====
 				{ "<leader>th", desc = "Terminal horizontal" },
 				{ "<leader>tv", desc = "Terminal vertical" },
 				{ "<leader>tt", desc = "Terminal toggle" },
 
-				-- Testing (Capital T to avoid terminal conflicts)
+				-- ===== TESTING (Capital T) =====
 				{ "<leader>Tn", desc = "Run nearest test" },
 				{ "<leader>Tf", desc = "Run file tests" },
 				{ "<leader>Td", desc = "Debug nearest test" },
 				{ "<leader>Ts", desc = "Test summary" },
 				{ "<leader>To", desc = "Test output" },
 
-				-- Markdown specific
+				-- ===== MARKDOWN =====
 				{ "<leader>mp", desc = "Markdown preview" },
 				{ "<leader>mt", desc = "Toggle table mode" },
 				{ "<leader>mT", desc = "Generate TOC" },
 				{ "<leader>mv", desc = "Toggle markview" },
 				{ "<leader>mi", desc = "Paste image" },
 
-				-- Neorg specific
+				-- ===== NEORG =====
 				{ "<leader>nw", desc = "Neorg workspaces" },
 				{ "<leader>nr", desc = "Return to index" },
 				{ "<leader>ni", desc = "Open workspace index" },
@@ -181,7 +185,7 @@ return {
 				{ "<leader>ntc", desc = "Table of contents" },
 				{ "<leader>nts", desc = "Tangle current file" },
 
-				-- UI/Toggle
+				-- ===== UI/TOGGLE =====
 				{ "<leader>un", desc = "Dismiss notifications" },
 				{ "<leader>us", desc = "Toggle spelling" },
 				{ "<leader>uw", desc = "Toggle wrap" },
@@ -193,7 +197,7 @@ return {
 				{ "<leader>ub", desc = "Toggle background" },
 				{ "<leader>uh", desc = "Toggle inlay hints" },
 
-				-- Diagnostics/Quickfix
+				-- ===== DIAGNOSTICS/QUICKFIX =====
 				{ "<leader>xx", desc = "Diagnostics (Trouble)" },
 				{ "<leader>xX", desc = "Buffer Diagnostics (Trouble)" },
 				{ "<leader>cs", desc = "Symbols (Trouble)" },
@@ -205,17 +209,19 @@ return {
 				{ "<leader>st", desc = "Todo search" },
 				{ "<leader>sT", desc = "Urgent todo search" },
 
-				-- Todo navigation
+				-- ===== TODO NAVIGATION =====
 				{ "]t", desc = "Next todo comment" },
 				{ "[t", desc = "Previous todo comment" },
 
-				-- Utilities
+				-- ===== UTILITIES =====
 				{ "<leader>N", desc = "Neovim News" },
 				{ "<leader>zm", desc = "Zen mode" },
+				{ "<leader>mi", desc = "Mise info" },
+				{ "<leader>mr", desc = "Run mise task" },
 				{ "<c-/>", desc = "Toggle terminal" },
 				{ "<c-_>", desc = "Toggle terminal" },
 
-				-- LSP mappings
+				-- ===== LSP MAPPINGS =====
 				{ "gd", desc = "Go to definition" },
 				{ "gD", desc = "Go to declaration" },
 				{ "gr", desc = "References" },
@@ -228,13 +234,13 @@ return {
 				{ "]g", desc = "Next git hunk" },
 				{ "[g", desc = "Previous git hunk" },
 
-				-- Buffer navigation
+				-- ===== BUFFER NAVIGATION =====
 				{ "<S-h>", desc = "Previous buffer" },
 				{ "<S-l>", desc = "Next buffer" },
 				{ "[b", desc = "Previous buffer" },
 				{ "]b", desc = "Next buffer" },
 
-				-- Treesitter text objects navigation
+				-- ===== TREESITTER TEXT OBJECTS =====
 				{ "]f", desc = "Next function" },
 				{ "[f", desc = "Previous function" },
 				{ "]c", desc = "Next class" },
@@ -244,7 +250,7 @@ return {
 				{ "]C", desc = "Next class end" },
 				{ "[C", desc = "Previous class end" },
 
-				-- Mini.surround
+				-- ===== MINI.SURROUND =====
 				{ "gsa", desc = "Add surrounding", mode = { "n", "v" } },
 				{ "gsd", desc = "Delete surrounding" },
 				{ "gsf", desc = "Find surrounding (right)" },
@@ -253,23 +259,48 @@ return {
 				{ "gsr", desc = "Replace surrounding" },
 				{ "gsn", desc = "Update n_lines" },
 
-				-- Mini.move
+				-- ===== MINI.MOVE =====
 				{ "<M-h>", desc = "Move left", mode = { "n", "v" } },
 				{ "<M-j>", desc = "Move down", mode = { "n", "v" } },
 				{ "<M-k>", desc = "Move up", mode = { "n", "v" } },
 				{ "<M-l>", desc = "Move right", mode = { "n", "v" } },
 
-				-- Mini.jump
+				-- ===== MINI.JUMP =====
 				{ "f", desc = "Jump forward" },
 				{ "F", desc = "Jump backward" },
 				{ "t", desc = "Jump till forward" },
 				{ "T", desc = "Jump till backward" },
 				{ ";", desc = "Repeat jump" },
 
-				-- Word navigation
+				-- ===== WORD NAVIGATION =====
 				{ "]]", desc = "Next Reference" },
 				{ "[[", desc = "Prev Reference" },
 			})
 		end,
 	},
 }
+
+--[[
+Which-Key Configuration Philosophy:
+
+1. DISCOVERABILITY: Help users discover available keybindings
+2. ORGANIZATION: Group related functions logically
+3. CONSISTENCY: Use consistent naming patterns
+4. COMPLETENESS: Cover all major keybindings in the configuration
+
+Key Organization Strategy:
+- Core Leader Groups: Main functionality areas
+- Language-Specific: Dedicated groups for each language
+- Tool-Specific: Dedicated groups for each tool
+- Navigation: Movement and jumping commands
+- Text Objects: Editing and manipulation commands
+
+Group Naming Conventions:
+- Lowercase for core areas (buffer, code, debug)
+- Language abbreviations for languages (go, py, zg)
+- Descriptive names for tools (terminal, testing)
+- Action-oriented descriptions for individual keys
+
+This provides a comprehensive help system that makes the configuration
+self-documenting and helps users discover functionality.
+]]
