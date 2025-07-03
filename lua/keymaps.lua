@@ -1,4 +1,4 @@
--- lua/keymaps.lua
+-- lua/keymaps.lua (Enhanced with Zig and Go support)
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
@@ -16,10 +16,6 @@ map("v", ">", ">gv", opts)
 -- Move text up and down
 map("v", "J", ":m '>+1<CR>gv=gv", opts)
 map("v", "K", ":m '<-2<CR>gv=gv", opts)
-
--- Stay in indent mode
-map("v", "<", "<gv", opts)
-map("v", ">", ">gv", opts)
 
 -- Better paste
 map("v", "p", '"_dP', opts)
@@ -45,18 +41,11 @@ map("n", "<leader>fr", "<cmd>Telescope oldfiles<CR>", { desc = "Recent files" })
 map("n", "<leader>fc", "<cmd>Telescope colorscheme<CR>", { desc = "Colorscheme" })
 map("n", "<leader>fk", "<cmd>Telescope keymaps<CR>", { desc = "Keymaps" })
 
--- File explorer
-map("n", "<leader>e", function()
-	require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
-end, { desc = "File explorer" })
+-- File explorer (now handled by mini.files plugin)
+-- No keymap here - handled in mini.lua
 
--- Buffer management
-map("n", "<leader>bd", function()
-	require("mini.bufremove").delete(0, false)
-end, { desc = "Delete buffer" })
-map("n", "<leader>bD", function()
-	require("mini.bufremove").delete(0, true)
-end, { desc = "Delete buffer (force)" })
+-- Buffer management (now handled by mini.bufremove plugin)
+-- No keymaps here - handled in mini.lua
 map("n", "<S-h>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Prev buffer" })
 map("n", "<S-l>", "<cmd>BufferLineCycleNext<CR>", { desc = "Next buffer" })
 
@@ -74,16 +63,13 @@ map("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
 
 -- Formatting
 map("n", "<leader>cf", function()
-	require("conform").format({ lsp_fallback = true })
+  require("conform").format({ lsp_fallback = true })
 end, { desc = "Format buffer" })
 
 -- Refactoring
 map({ "n", "v" }, "<leader>rr", function()
-	require("refactoring").select_refactor()
+  require("refactoring").select_refactor()
 end, { desc = "Refactor" })
-
--- Database
-map("n", "<leader>db", "<cmd>DBUI<CR>", { desc = "Database UI" })
 
 -- Terminal
 map("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<CR>", { desc = "Terminal horizontal" })
@@ -99,10 +85,25 @@ map("n", "<leader>pv", "<cmd>!uv venv<CR>", { desc = "Create virtual environment
 map("n", "<leader>pc", "<cmd>!uv run ruff check .<CR>", { desc = "Check code with Ruff" })
 map("n", "<leader>pf", "<cmd>!uv run ruff format .<CR>", { desc = "Format code with Ruff" })
 
+-- Go development keymaps (Note: These are handled in go.lua plugin)
+-- But adding direct keymaps for convenience
+map("n", "<leader>gr", "<cmd>GoRun<CR>", { desc = "Run Go file" })
+map("n", "<leader>gt", "<cmd>GoTest<CR>", { desc = "Test Go package" })
+map("n", "<leader>gb", "<cmd>GoBuild<CR>", { desc = "Build Go project" })
+map("n", "<leader>gf", "<cmd>GoFmt<CR>", { desc = "Format Go file" })
+map("n", "<leader>gi", "<cmd>GoImports<CR>", { desc = "Go imports" })
+
+-- Zig development keymaps
+map("n", "<leader>zr", "<cmd>ZigRun<CR>", { desc = "Run Zig file" })
+map("n", "<leader>zt", "<cmd>ZigTest<CR>", { desc = "Test Zig file" })
+map("n", "<leader>zb", "<cmd>ZigBuild<CR>", { desc = "Build Zig project" })
+map("n", "<leader>zf", "<cmd>ZigFmt<CR>", { desc = "Format Zig file" })
+map("n", "<leader>zc", "<cmd>ZigCheck<CR>", { desc = "Check Zig file" })
+
 -- Git
 map("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "LazyGit" })
 map("n", "<leader>gb", "<cmd>Gitsigns blame_line<CR>", { desc = "Git blame line" })
 map("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<CR>", { desc = "Preview hunk" })
-map("n", "<leader>gr", "<cmd>Gitsigns reset_hunk<CR>", { desc = "Reset hunk" })
+map("n", "<leader>gR", "<cmd>Gitsigns reset_hunk<CR>", { desc = "Reset hunk" })
 map("n", "]g", "<cmd>Gitsigns next_hunk<CR>", { desc = "Next git hunk" })
 map("n", "[g", "<cmd>Gitsigns prev_hunk<CR>", { desc = "Previous git hunk" })
