@@ -1,4 +1,4 @@
--- lua/plugins/lsp.lua (Updated with Zig support)
+-- lua/plugins/lsp.lua (Fixed without schemastore dependency)
 return {
   {
     "williamboman/mason.nvim",
@@ -23,18 +23,18 @@ return {
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
-          "gopls",
-          "html",
-          "sqlls",
-          "lua_ls",
-          "zls",     -- Zig Language Server
-          "pyright", -- Python
-          "ruff",    -- Python linter/formatter
-          "ts_ls",
-          "json-lsp",
-          "yaml-language-server",
-          "dockerfile-language-server",
-          "taplo", -- TOML
+          "gopls",    -- Go
+          "html",     -- HTML
+          "sqlls",    -- SQL
+          "lua_ls",   -- Lua
+          "zls",      -- Zig Language Server
+          "pyright",  -- Python
+          "ruff",     -- Python linter/formatter
+          "ts_ls",    -- TypeScript/JavaScript
+          "jsonls",   -- JSON
+          "yamlls",   -- YAML
+          "dockerls", -- Dockerfile
+          "taplo",    -- TOML
         },
         automatic_installation = true,
       })
@@ -131,9 +131,51 @@ return {
         html = {},
         sqlls = {},
         ts_ls = {},
-        jsonls = {},
-        yaml_language_server = {},
-        docker_compose_language_service = {},
+        jsonls = {
+          settings = {
+            json = {
+              validate = { enable = true },
+              -- Basic JSON schema support without schemastore
+              schemas = {
+                {
+                  fileMatch = { "package.json" },
+                  url = "https://json.schemastore.org/package.json",
+                },
+                {
+                  fileMatch = { "tsconfig*.json" },
+                  url = "https://json.schemastore.org/tsconfig.json",
+                },
+                {
+                  fileMatch = { ".prettierrc", ".prettierrc.json" },
+                  url = "https://json.schemastore.org/prettierrc.json",
+                },
+                {
+                  fileMatch = { ".eslintrc", ".eslintrc.json" },
+                  url = "https://json.schemastore.org/eslintrc.json",
+                },
+              },
+            },
+          },
+        },
+        yamlls = {
+          settings = {
+            yaml = {
+              schemas = {
+                ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+                ["https://json.schemastore.org/github-action.json"] = "/.github/action.{yml,yaml}",
+                ["https://json.schemastore.org/docker-compose.json"] = "/*docker-compose*.{yml,yaml}",
+                ["https://json.schemastore.org/chart.json"] = "/Chart.{yml,yaml}",
+                ["https://json.schemastore.org/dependabot-v2.json"] = "/.github/dependabot.{yml,yaml}",
+                ["https://json.schemastore.org/gitlab-ci.json"] = "/.gitlab-ci.{yml,yaml}",
+                ["https://json.schemastore.org/travis.json"] = "/.travis.{yml,yaml}",
+                ["https://json.schemastore.org/codecov.json"] = "/codecov.{yml,yaml}",
+                ["https://json.schemastore.org/circleci.json"] = "/.circleci/**/*.{yml,yaml}",
+                ["https://json.schemastore.org/pre-commit-config.json"] = "/.pre-commit-config.{yml,yaml}",
+              },
+            },
+          },
+        },
+        dockerls = {},
         taplo = {},
       }
 
