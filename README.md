@@ -1,481 +1,252 @@
 # 🚀 Modern Neovim Configuration
 
-A highly optimized, low cognitive load Neovim configuration designed for multi-language development with Go, Zig, Python, and web technologies.
+A highly optimized, low cognitive load Neovim configuration designed for multi-language development with Go, Zig, Python, web technologies, and advanced note-taking.
 
-## ✨ Features
+## 📚 **Documentation**
 
-- **🔥 Zero-config setup** - Language servers auto-install and configure
-- **⚡ Fast startup** - Lazy loading for optimal performance
-- **🎯 Consistent keybindings** - Unified patterns across all languages
-- **🔧 Smart project detection** - Auto-detects and configures project environments
-- **📝 Format-on-save** - Automatic code formatting with industry standards
-- **🐛 Integrated debugging** - DAP support for Go and Python
-- **🔍 Powerful search** - Telescope with fuzzy finding and live grep
-- **🎨 Modern UI** - Catppuccin theme with bufferline, statusline, and notifications
+### **🎯 Language-Specific Guides**
+- **[🚀 Go Development](./go-cheatsheet.md)** - Complete Go workflow with testing, debugging, and tools
+- **[🐍 Python Development](./python-cheatsheet.md)** - Modern Python with UV, Ruff, and pytest
+- **[⚡ Zig Development](./zig-cheatsheet.md)** - Full Zig development cycle and ZLS integration
+- **[📝 Markdown Editing](./markdown-cheatsheet.md)** - Professional markdown with live preview and tables
+- **[📓 Neorg Note-taking](./neorg-cheatsheet.md)** - Advanced knowledge management and GTD system
 
-## 🛠️ Supported Languages
+### **🔧 Configuration Guides**
+- **[🛠️ Mise Integration](./mise-configuration.md)** - Development tool management with mise
+- **[⌨️ General Neovim](./general-cheatsheet.md)** - Core editor features and navigation
+- **[✅ Todo Management](./todo-comments-cheatsheet.md)** - Comment-based task tracking
 
-| Language | LSP | Formatter | Debugger | Test Runner |
-|----------|-----|-----------|----------|-------------|
-| **Go** | gopls | gofumpt, goimports | ✅ | go test, neotest |
-| **Zig** | zls | zig fmt | ✅ | zig test |
-| **Python** | pyright, ruff | ruff format | ✅ | pytest, neotest |
-| **Lua** | lua_ls | stylua | - | - |
-| **JavaScript/TypeScript** | ts_ls | prettier | - | - |
-| **JSON/YAML/TOML** | Multiple | prettier, taplo | - | - |
-| **SQL** | sqlls | sqlfluff | - | - |
+### **📊 Quick Reference**
+| Feature | Key Pattern | Guide |
+|---------|-------------|-------|
+| **Go Development** | `<leader>G*` | [Go Guide](./go-cheatsheet.md) |
+| **Python Development** | `<leader>p*` | [Python Guide](./python-cheatsheet.md) |
+| **Zig Development** | `<leader>z*` | [Zig Guide](./zig-cheatsheet.md) |
+| **Markdown Editing** | `<leader>m*` | [Markdown Guide](./markdown-cheatsheet.md) |
+| **Note-taking** | `<leader>n*` | [Neorg Guide](./neorg-cheatsheet.md) |
+| **Todo Comments** | `]t` / `[t` | [Todo Guide](./todo-comments-cheatsheet.md) |
+| **File Management** | `<leader>f*` | [General Guide](./general-cheatsheet.md) |
+| **Git Operations** | `<leader>g*` | [General Guide](./general-cheatsheet.md) |
 
-## 📦 Installation
+---
 
-### Prerequisites
+## ✨ **Key Features**
+
+### **🔥 Zero-config setup**
+- Language servers auto-install and configure
+- Development tools managed by [mise](./mise-configuration.md)
+- Consistent keybindings across all languages
+
+### **⚡ Performance Optimized**
+- Fast startup with lazy loading
+- Efficient plugin management
+- Reduced to 47 carefully selected plugins
+
+### **🎯 Multi-language Support**
+- **Go**: Full development cycle with testing and debugging
+- **Python**: Modern workflow with UV and Ruff
+- **Zig**: Complete toolchain integration
+- **Web**: TypeScript, JavaScript, HTML, CSS support
+- **Markdown**: Professional editing with live preview
+- **Notes**: Advanced knowledge management with Neorg
+
+### **🧠 Knowledge Management**
+- **Neorg**: Advanced note-taking with GTD methodology
+- **Todo Comments**: Code-embedded task management
+- **Journal System**: Daily reflection and planning
+- **Project Documentation**: Seamless markdown workflow
+
+---
+
+## 📦 **Installation**
+
+### **Prerequisites**
 - Neovim 0.9+
 - Git
-- A [Nerd Font](https://www.nerdfonts.com/) for icons
-- `ripgrep` for Telescope search
-- Language-specific tools (Go, Zig, Python UV, Node.js)
-- `make` for telescope-fzf-native compilation
+- [Nerd Font](https://www.nerdfonts.com/) for icons
+- [mise](https://mise.jdx.dev/) for development tool management
+- `ripgrep` for search functionality
+- `make` for building native extensions
 
-### Quick Setup
+### **Quick Setup**
 ```bash
-# Backup existing config
+# 1. Backup existing config
 mv ~/.config/nvim ~/.config/nvim.backup
 
-# Clone this configuration
+# 2. Clone this configuration
 git clone <your-repo> ~/.config/nvim
 
-# Start Neovim - plugins will auto-install
+# 3. Install mise (if not already installed)
+curl https://mise.jdx.dev/install.sh | sh
+
+# 4. Configure mise for development tools
+cp ~/.config/nvim/docs/mise-example.toml ~/.config/mise/config.toml
+
+# 5. Start Neovim - everything installs automatically
 nvim
 ```
 
-### First Launch
-1. Plugins will automatically install via lazy.nvim
-2. Language servers install automatically via Mason
-3. Formatters and tools auto-install via Mason
-4. Restart Neovim after initial setup completes
+### **First Launch**
+1. **Plugins install** automatically via lazy.nvim
+2. **Language servers** install via Mason
+3. **Development tools** install via mise
+4. **Restart Neovim** after initial setup
 
-### Post-Installation
+### **Post-Installation Verification**
 ```bash
 # Check health
 :checkhealth
 
-# Verify Mason installations
+# Verify plugins
+:Lazy
+
+# Check language servers
 :Mason
 
-# Update everything
-:Lazy sync
-:TSUpdate
+# Verify mise tools
+mise doctor
 ```
 
-## 🎯 Keybindings
+---
 
-### Core Navigation
-| Key | Action | Description |
-|-----|--------|-------------|
-| `<Space>` | Leader key | Main prefix for commands |
-| `<leader>ff` | Find files | Telescope file finder |
-| `<leader>fg` | Live grep | Search in files |
-| `<leader>fb` | Buffers | Open buffer list |
-| `<leader>fh` | Help tags | Search help documentation |
-| `<leader>fr` | Recent files | Recently opened files |
-| `<leader>e` | File explorer | Open mini.files (current file dir) |
-| `<leader>E` | File explorer (cwd) | Open mini.files (working dir) |
-| `Shift+h/l` | Buffer nav | Previous/next buffer |
+## 🎯 **Quick Start**
 
-### LSP & Code
-| Key | Action | Description |
-|-----|--------|-------------|
-| `gd` | Go to definition | Jump to definition |
-| `gr` | References | Show references |
-| `K` | Hover docs | Show documentation |
-| `<leader>ca` | Code actions | Available code actions |
-| `<leader>rn` | Rename | Rename symbol |
-| `<leader>cf` | Format | Format current buffer |
-| `[d` / `]d` | Diagnostics | Previous/next diagnostic |
+### **🚀 Go Development**
+```bash
+# Create new project
+mkdir my-go-app && cd my-go-app
+mise use go@latest
+go mod init my-go-app
+nvim main.go
 
-### Language-Specific Commands
+# Key commands:
+# <leader>Gr - Run Go file
+# <leader>Gt - Run tests
+# <leader>Gb - Build project
+```
+📖 **[Complete Go Guide →](./go-cheatsheet.md)**
 
-#### Go (`<leader>g`)
-| Key | Action | Description |
-|-----|--------|-------------|
-| `<leader>gr` | Run | Execute current Go file |
-| `<leader>gt` | Test | Run tests in package |
-| `<leader>gT` | Test func | Run test under cursor |
-| `<leader>gb` | Build | Build Go project |
-| `<leader>gf` | Format | Format Go file |
-| `<leader>gi` | Imports | Organize imports |
-| `<leader>gc` | Coverage | Show test coverage |
+### **🐍 Python Development**
+```bash
+# Create new project
+mkdir my-python-app && cd my-python-app
+mise use python@3.12 uv@latest
+uv init && uv add --dev pytest ruff
+nvim main.py
 
-#### Zig (`<leader>z`)
-| Key | Action | Description |
-|-----|--------|-------------|
-| `<leader>zr` | Run | Execute current Zig file |
-| `<leader>zt` | Test | Run Zig tests |
-| `<leader>zb` | Build | Build Zig project |
-| `<leader>zf` | Format | Format Zig file |
-| `<leader>zc` | Check | Check Zig syntax |
+# Key commands:
+# <leader>pr - Run with UV
+# <leader>pt - Run tests
+# <leader>pf - Format with Ruff
+```
+📖 **[Complete Python Guide →](./python-cheatsheet.md)**
 
-#### Python (`<leader>p`)
-| Key | Action | Description |
-|-----|--------|-------------|
-| `<leader>pr` | Run | Execute with UV |
-| `<leader>pt` | Test | Run pytest |
-| `<leader>pc` | Check | Ruff linting |
-| `<leader>pf` | Format | Ruff formatting |
-| `<leader>ps` | Sync | UV dependency sync |
-| `<leader>pv` | Virtual env | Create venv |
+### **📓 Note-taking with Neorg**
+```bash
+# Start note-taking
+nvim notes.norg
 
-### Terminal & Git
-| Key | Action | Description |
-|-----|--------|-------------|
-| `<leader>th` | Terminal horizontal | Open horizontal terminal |
-| `<leader>tv` | Terminal vertical | Open vertical terminal |
-| `<leader>tf` | Terminal float | Open floating terminal |
-| `<leader>gg` | LazyGit | Open LazyGit interface |
-| `]g` / `[g` | Git hunks | Next/previous git hunk |
+# Key commands:
+# <leader>nt - Today's journal
+# <leader>nn - New note
+# <leader>ngc - GTD quick capture
+```
+📖 **[Complete Neorg Guide →](./neorg-cheatsheet.md)**
 
-### Mini.nvim Text Objects & Movement
-| Key | Action | Description |
-|-----|--------|-------------|
-| `gsa` | Add surrounding | Add surrounding characters |
-| `gsd` | Delete surrounding | Delete surrounding characters |
-| `gsr` | Replace surrounding | Replace surrounding characters |
-| `<leader>bd` | Delete buffer | Smart buffer deletion with save prompt |
-| `<leader>bD` | Force delete buffer | Force delete without saving |
-| `Alt+hjkl` | Move text | Move lines/blocks in normal/visual mode |
-| `af/if` | Function text objects | Around/inside function |
-| `ac/ic` | Class text objects | Around/inside class |
-| `]f/[f` | Function navigation | Next/previous function |
-| `]c/[c` | Class navigation | Next/previous class |
+---
 
-## 📁 Configuration Structure
+## 🔧 **Configuration Structure**
 
 ```
 ~/.config/nvim/
 ├── init.lua                    # Entry point
 ├── lazy-lock.json             # Plugin versions
-├── lua/
-│   ├── settings.lua           # Neovim settings
-│   ├── keymaps.lua           # Key mappings
-│   ├── autocmds.lua          # Auto commands
-│   └── plugins/
-│       ├── completion.lua     # Blink.cmp setup
-│       ├── debugging.lua      # DAP configuration
-│       ├── formatting.lua     # Conform.nvim setup
-│       ├── git.lua           # Git integration
-│       ├── go.lua            # Go language support
-│       ├── lsp.lua           # LSP configuration
-│       ├── mini.lua          # Mini.nvim modules
-│       ├── python.lua        # Python development
-│       ├── terminal.lua      # Terminal integration
-│       ├── ui.lua            # UI components
-│       ├── which-key.lua     # Key helper
-│       └── zig.lua           # Zig language support
+├── docs/                      # Documentation
+│   ├── go-cheatsheet.md       # Go development guide
+│   ├── python-cheatsheet.md   # Python development guide
+│   ├── zig-cheatsheet.md      # Zig development guide
+│   ├── markdown-cheatsheet.md # Markdown editing guide
+│   ├── neorg-cheatsheet.md    # Note-taking guide
+│   ├── general-cheatsheet.md  # General Neovim guide
+│   ├── todo-comments-cheatsheet.md # Todo management
+│   └── mise-configuration.md  # Development tools setup
+└── lua/
+    ├── settings.lua           # Neovim settings
+    ├── keymaps.lua           # Key mappings
+    ├── autocmds.lua          # Auto commands
+    └── plugins/
+        ├── completion.lua     # Blink.cmp setup
+        ├── debugging.lua      # DAP configuration
+        ├── formatting.lua     # Conform.nvim setup
+        ├── git.lua           # Git integration
+        ├── go.lua            # Go language support
+        ├── lsp.lua           # LSP configuration
+        ├── markdown.lua      # Markdown editing
+        ├── mini.lua          # Mini.nvim modules
+        ├── neorg.lua         # Advanced note-taking
+        ├── python.lua        # Python development
+        ├── snacks.lua        # UI integration
+        ├── todo-comments.lua # Todo highlighting
+        ├── ui.lua            # UI components
+        ├── which-key.lua     # Key helper
+        └── zig.lua           # Zig language support
 ```
 
-## ⚙️ Configuration Files
+---
 
-### .editorconfig
-Place in your project root for consistent formatting across editors:
+## 🎨 **Workflow Examples**
 
-```ini
-# .editorconfig - Universal editor configuration
+### **💼 Daily Development Workflow**
+1. **Start day**: `<leader>nt` - Open today's journal
+2. **Find files**: `<leader>ff` - Quick file finder
+3. **Code navigation**: `gd` - Go to definition, `gr` - Find references
+4. **Run/test**: Language-specific commands (`<leader>Gr`, `<leader>pr`, etc.)
+5. **Git workflow**: `<leader>gg` - LazyGit interface
+6. **End day**: Journal reflection and tomorrow planning
 
-root = true
+### **📚 Research & Documentation**
+1. **Capture ideas**: `<leader>ngc` - Quick GTD capture
+2. **Create notes**: `<leader>nn` - New structured note
+3. **Link knowledge**: Use Neorg linking syntax
+4. **Write docs**: Markdown with live preview (`<leader>mp`)
+5. **Organize**: Use GTD methodology for information management
 
-# Default settings for all files
-[*]
-charset = utf-8
-end_of_line = lf
-insert_final_newline = true
-trim_trailing_whitespace = true
+### **🐛 Debugging Workflow**
+1. **Set breakpoints**: `<leader>db`
+2. **Start debugging**: Language-specific debug commands
+3. **Navigate**: `<leader>di` (step into), `<leader>dO` (step over)
+4. **Inspect**: Use DAP UI for variable inspection
+5. **Document**: Add findings to notes or comments
 
-# Programming languages with 2-space indentation
-[*.{js,jsx,ts,tsx,json,jsonc,html,css,scss,sass,vue,svelte,xml,yaml,yml,toml}]
-indent_style = space
-indent_size = 2
-max_line_length = 100
+---
 
-# Lua configuration
-[*.lua]
-indent_style = space
-indent_size = 2
-max_line_length = 120
+## 🎯 **Key Benefits**
 
-# Python configuration
-[*.py]
-indent_style = space
-indent_size = 4
-max_line_length = 88
+✅ **Consistent Experience** - Same patterns across all languages
+✅ **Zero Configuration** - Works out of the box
+✅ **Performance Optimized** - Fast startup and operation
+✅ **Knowledge Management** - Integrated note-taking and GTD
+✅ **Modern Tooling** - Latest development tools and practices
+✅ **Comprehensive Docs** - Detailed guides for every feature
+✅ **Tool Integration** - Seamless mise, UV, Ruff, and more
 
-# Go configuration (uses tabs per Go convention)
-[*.go]
-indent_style = tab
-indent_size = 4
-max_line_length = 120
+---
 
-# Zig configuration
-[*.zig]
-indent_style = space
-indent_size = 4
-max_line_length = 100
+## 🤝 **Contributing**
 
-# Shell scripts
-[*.{sh,bash,zsh}]
-indent_style = space
-indent_size = 2
-max_line_length = 100
+See individual guides for language-specific improvements:
+- [Go Development](./go-cheatsheet.md) for Go-related enhancements
+- [Python Development](./python-cheatsheet.md) for Python improvements
+- [Neorg Guide](./neorg-cheatsheet.md) for note-taking features
 
-# Markdown
-[*.md]
-indent_style = space
-indent_size = 2
-trim_trailing_whitespace = false
-max_line_length = 80
+---
 
-# Makefiles must use tabs
-[{Makefile,makefile,*.mk}]
-indent_style = tab
-indent_size = 4
-
-# Docker files
-[{Dockerfile,*.dockerfile}]
-indent_style = space
-indent_size = 2
-```
-
-### .stylua.toml (Lua)
-```toml
-column_width = 120
-line_endings = "Unix"
-indent_type = "Spaces"
-indent_width = 2
-quote_style = "AutoPreferDouble"
-call_parentheses = "Always"
-collapse_simple_statement = "Never"
-```
-
-### .prettierrc.json (JavaScript/TypeScript/Web)
-```json
-{
-  "semi": true,
-  "singleQuote": false,
-  "tabWidth": 2,
-  "trailingComma": "es5",
-  "printWidth": 100,
-  "useTabs": false,
-  "bracketSpacing": true,
-  "arrowParens": "avoid",
-  "endOfLine": "lf",
-  "overrides": [
-    {
-      "files": "*.md",
-      "options": {
-        "printWidth": 80,
-        "proseWrap": "always"
-      }
-    }
-  ]
-}
-```
-
-### pyproject.toml (Python - Ruff)
-```toml
-[tool.ruff]
-line-length = 88
-target-version = "py39"
-extend-exclude = [
-    "__pycache__",
-    ".venv",
-    "venv",
-    ".env",
-    "env",
-    "migrations",
-]
-
-[tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-    "N",   # pep8-naming
-]
-ignore = [
-    "E501",  # line too long (handled by formatter)
-    "B008",  # do not perform function calls in argument defaults
-    "C901",  # too complex
-]
-
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]  # allow unused imports in __init__.py
-"test_*.py" = ["B011"]    # allow assert False in tests
-"**/tests/**/*.py" = ["B011"]
-
-[tool.ruff.lint.isort]
-known-first-party = ["your_project_name"]
-split-on-trailing-comma = true
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-skip-source-first-line = false
-line-ending = "auto"
-```
-
-### .sqlfluff (SQL)
-```ini
-[sqlfluff]
-dialect = postgres
-templater = jinja
-exclude_rules = L003,L011,L012,L014,L016,L031,L034
-max_line_length = 100
-
-[sqlfluff:indentation]
-tab_space_size = 2
-indent_unit = space
-
-[sqlfluff:layout:type:comma]
-spacing_before = touch
-line_position = trailing
-
-[sqlfluff:rules:capitalisation.keywords]
-capitalisation_policy = lower
-
-[sqlfluff:rules:capitalisation.identifiers]
-extended_capitalisation_policy = lower
-```
-
-## 🚀 Quick Start Workflows
-
-### New Go Project
-```bash
-mkdir my-go-project && cd my-go-project
-go mod init my-go-project
-echo 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World!")\n}' > main.go
-nvim main.go
-# Use <leader>gr to run!
-```
-
-### New Zig Project
-```bash
-mkdir my-zig-project && cd my-zig-project
-zig init-exe
-nvim src/main.zig
-# Use <leader>zr to run!
-```
-
-### New Python Project (UV)
-```bash
-mkdir my-python-project && cd my-python-project
-uv init
-uv add --dev pytest ruff mypy
-nvim main.py
-# Use <leader>pr to run!
-```
-
-## 🎨 Customization
-
-### Changing Theme
-Edit `lua/plugins/ui.lua`:
-```lua
-opts = {
-  flavour = "macchiato", -- mocha, macchiato, frappe, latte
-  -- ... other options
-}
-```
-
-### Adding New Language
-1. Add LSP server to `lua/plugins/lsp.lua`
-2. Add formatter to `lua/plugins/formatting.lua`
-3. Add Treesitter parser to `lua/plugins/ui.lua`
-4. Create language-specific plugin file if needed
-5. Add autocmds to `lua/autocmds.lua` for file-specific settings
-
-### Custom Keybindings
-Add to `lua/keymaps.lua`:
-```lua
-map("n", "<leader>custom", "<cmd>YourCommand<CR>", { desc = "Your description" })
-```
-
-### Disabling Mini Modules
-Edit `lua/plugins/mini.lua` and comment out unwanted modules:
-```lua
--- Disable mini.pairs if you don't want auto-pairing
--- {
---   "echasnovski/mini.pairs",
---   ...
--- },
-```
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-### **LSP not working?**
-```vim
-:checkhealth lsp
-:Mason  " Check if servers are installed
-:LspInfo " Check LSP status for current buffer
-:LspRestart " Restart LSP if needed
-```
-
-### **Formatting not working?**
-```vim
-:ConformInfo " Check formatter status
-:Mason " Ensure formatters are installed
-```
-
-### **Mini.nvim issues?**
-```vim
-:checkhealth mini " Check mini.nvim health
-" Individual mini modules can be disabled in lua/plugins/mini.lua
-```
-
-### **Slow startup?**
-```vim
-:Lazy profile " Check plugin load times
-:checkhealth lazy " Check lazy.nvim health
-```
-
-### **Treesitter issues?**
-```vim
-:TSUpdate " Update parsers
-:checkhealth nvim-treesitter
-:TSInstallInfo " Check installed parsers
-```
-
-### Performance Tips
-- Disable unused language servers in Mason
-- Reduce Treesitter parsers if not needed: edit `lua/plugins/ui.lua`
-- Disable unused mini.nvim modules: edit `lua/plugins/mini.lua`
-- Use `:Lazy clean` to remove unused plugins
-- Check `:checkhealth` for optimization suggestions
-- Monitor startup time with `:Lazy profile`
-
-## 📚 Learning Resources
-
-- **Neovim**: [neovim.io](https://neovim.io)
-- **Lazy.nvim**: [lazy.nvim docs](https://lazy.folke.io)
-- **Mason**: [mason.nvim](https://github.com/williamboman/mason.nvim)
-- **Telescope**: [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
-- **LSP**: [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Test your changes thoroughly
-4. Submit a pull request
-
-## 📝 License
+## 📝 **License**
 
 MIT License - feel free to use and modify as needed.
 
 ---
 
-**Happy coding!** 🎉
+**🎉 Happy coding and note-taking!**
 
-This configuration is designed to minimize cognitive load while maximizing productivity. The consistent keybinding patterns and zero-config approach mean you can focus on writing code, not configuring your editor.
+This configuration minimizes cognitive load while maximizing productivity across development and knowledge management workflows. Check out the individual guides to master each aspect of the system.

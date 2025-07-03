@@ -1,4 +1,4 @@
--- lua/plugins/which-key.lua (Updated to new spec format)
+-- lua/plugins/which-key.lua (Updated with resolved key conflicts)
 return {
   {
     "folke/which-key.nvim",
@@ -7,15 +7,11 @@ return {
       local wk = require("which-key")
 
       wk.setup({
-        plugins = {
-          spelling = true,
-        },
-        win = {
-          border = "rounded",
-        },
+        plugins = { spelling = true },
+        win = { border = "rounded" },
       })
 
-      -- Register key mappings using the new spec format
+      -- Register key mappings with resolved conflicts
       wk.add({
         -- Single character prefixes
         { "g",           group = "goto" },
@@ -28,7 +24,8 @@ return {
         { "<leader>c",   group = "code" },
         { "<leader>d",   group = "debug" },
         { "<leader>f",   group = "file/find" },
-        { "<leader>g",   group = "git/go" },
+        { "<leader>g",   group = "git" },
+        { "<leader>G",   group = "go" }, -- Moved Go to capital G
         { "<leader>m",   group = "markdown" },
         { "<leader>p",   group = "python" },
         { "<leader>q",   group = "quit/session" },
@@ -37,14 +34,13 @@ return {
         { "<leader>u",   group = "ui/toggle" },
         { "<leader>w",   group = "windows" },
         { "<leader>x",   group = "diagnostics/quickfix" },
-        { "<leader>z",   group = "zig/zen" },
+        { "<leader>z",   group = "zig" },
 
         -- Sub-groups
         { "<leader>dg",  group = "debug go" },
-        { "<leader>gh",  group = "git hunks" },
         { "<leader>pe",  group = "python env" },
 
-        -- Specific key mappings with descriptions
+        -- File/Find
         { "<leader>ff",  desc = "Find files" },
         { "<leader>fg",  desc = "Live grep" },
         { "<leader>fb",  desc = "Buffers" },
@@ -53,9 +49,11 @@ return {
         { "<leader>fc",  desc = "Colorscheme" },
         { "<leader>fk",  desc = "Keymaps" },
 
+        -- File explorer
         { "<leader>e",   desc = "File explorer (current dir)" },
         { "<leader>E",   desc = "File explorer (cwd)" },
 
+        -- Buffer management (using snacks.nvim)
         { "<leader>bd",  desc = "Delete buffer" },
         { "<leader>bD",  desc = "Delete buffer (force)" },
         { "<leader>bp",  desc = "Toggle pin" },
@@ -64,10 +62,13 @@ return {
         { "<leader>br",  desc = "Delete buffers to the right" },
         { "<leader>bl",  desc = "Delete buffers to the left" },
 
+        -- Code
         { "<leader>ca",  desc = "Code actions" },
         { "<leader>cf",  desc = "Format buffer" },
         { "<leader>cg",  desc = "Generate docstring" },
+        { "<leader>cR",  desc = "Rename file" },
 
+        -- Debug
         { "<leader>db",  desc = "Toggle breakpoint" },
         { "<leader>dc",  desc = "Continue" },
         { "<leader>dC",  desc = "Run to cursor" },
@@ -84,24 +85,28 @@ return {
         { "<leader>dt",  desc = "Terminate" },
         { "<leader>dw",  desc = "Widgets" },
 
+        -- Git (resolved conflicts)
         { "<leader>gg",  desc = "LazyGit" },
         { "<leader>gb",  desc = "Git blame line" },
+        { "<leader>gB",  desc = "Git browse" },
         { "<leader>gp",  desc = "Preview hunk" },
         { "<leader>gR",  desc = "Reset hunk" },
+        { "<leader>gf",  desc = "File history" },
+        { "<leader>gl",  desc = "Git log" },
 
-        -- Go specific
-        { "<leader>gr",  desc = "Run Go file" },
-        { "<leader>gt",  desc = "Test Go package" },
-        { "<leader>gT",  desc = "Test Go function" },
-        { "<leader>gb",  desc = "Build Go project" },
-        { "<leader>gc",  desc = "Go coverage" },
-        { "<leader>gf",  desc = "Format Go file" },
-        { "<leader>gi",  desc = "Go imports" },
-        { "<leader>gm",  desc = "Go mod tidy" },
-        { "<leader>ga",  desc = "Add Go test" },
-        { "<leader>gd",  desc = "Go documentation" },
-        { "<leader>gv",  desc = "Go vet" },
-        { "<leader>gl",  desc = "Go lint" },
+        -- Go specific (moved to <leader>G*)
+        { "<leader>Gr",  desc = "Run Go file" },
+        { "<leader>Gt",  desc = "Test Go package" },
+        { "<leader>GT",  desc = "Test Go function" },
+        { "<leader>Gb",  desc = "Build Go project" },
+        { "<leader>Gc",  desc = "Go coverage" },
+        { "<leader>Gf",  desc = "Format Go file" },
+        { "<leader>Gi",  desc = "Go imports" },
+        { "<leader>Gm",  desc = "Go mod tidy" },
+        { "<leader>Ga",  desc = "Add Go test" },
+        { "<leader>Gd",  desc = "Go documentation" },
+        { "<leader>Gv",  desc = "Go vet" },
+        { "<leader>Gl",  desc = "Go lint" },
 
         -- Python specific
         { "<leader>pr",  desc = "Run Python file with UV" },
@@ -112,6 +117,9 @@ return {
         { "<leader>pc",  desc = "Check code with Ruff" },
         { "<leader>pf",  desc = "Format code with Ruff" },
         { "<leader>pev", desc = "Select Python environment" },
+        { "<leader>pR",  desc = "Start Python REPL" },
+        { "<leader>pS",  desc = "Send file to REPL" },
+        { "<leader>pm",  desc = "Send marked text to REPL" },
 
         -- Zig specific
         { "<leader>zr",  desc = "Run Zig file" },
@@ -120,28 +128,27 @@ return {
         { "<leader>zf",  desc = "Format Zig file" },
         { "<leader>zc",  desc = "Check Zig file" },
         { "<leader>zi",  desc = "Initialize Zig project" },
-        { "<leader>z",   desc = "Zen mode" }, -- This conflicts with Zig group, consider changing
+        { "<leader>zm",  desc = "Zen mode" },
 
-        -- Terminal
+        -- Terminal (using snacks.nvim, resolved conflicts)
         { "<leader>th",  desc = "Terminal horizontal" },
         { "<leader>tv",  desc = "Terminal vertical" },
-        { "<leader>tf",  desc = "Terminal float" },
+        { "<leader>tt",  desc = "Terminal toggle" },
 
-        -- Test
-        { "<leader>tt",  desc = "Run nearest test" },
-        { "<leader>tf",  desc = "Run file tests" },
+        -- Test (resolved <leader>tf conflict)
+        { "<leader>tT",  desc = "Run file tests" },
         { "<leader>td",  desc = "Debug nearest test" },
         { "<leader>ts",  desc = "Test summary" },
         { "<leader>to",  desc = "Test output" },
 
         -- Markdown specific
-        { "<leader>mp",  desc = "Markdown preview",                    ft = "markdown" },
-        { "<leader>mt",  desc = "Toggle table mode",                   ft = "markdown" },
-        { "<leader>mT",  desc = "Generate TOC",                        ft = "markdown" },
-        { "<leader>mv",  desc = "Toggle markview",                     ft = "markdown" },
-        { "<leader>mi",  desc = "Paste image",                         ft = "markdown" },
+        { "<leader>mp",  desc = "Markdown preview" },
+        { "<leader>mt",  desc = "Toggle table mode" },
+        { "<leader>mT",  desc = "Generate TOC" },
+        { "<leader>mv",  desc = "Toggle markview" },
+        { "<leader>mi",  desc = "Paste image" },
 
-        -- Snacks.nvim toggles
+        -- UI/Toggle
         { "<leader>un",  desc = "Dismiss notifications" },
         { "<leader>us",  desc = "Toggle spelling" },
         { "<leader>uw",  desc = "Toggle wrap" },
@@ -153,17 +160,18 @@ return {
         { "<leader>ub",  desc = "Toggle background" },
         { "<leader>uh",  desc = "Toggle inlay hints" },
 
-        -- Additional Snacks features
-        { "<leader>cR",  desc = "Rename file" },
-        { "<leader>N",   desc = "Neovim News" },
-        { "<c-/>",       desc = "Toggle terminal" },
-        { "<c-_>",       desc = "Toggle terminal" },
+        -- Diagnostics/Quickfix
         { "<leader>xx",  desc = "Diagnostics (Trouble)" },
         { "<leader>xX",  desc = "Buffer Diagnostics (Trouble)" },
         { "<leader>cs",  desc = "Symbols (Trouble)" },
         { "<leader>cl",  desc = "LSP Definitions/references (Trouble)" },
         { "<leader>xL",  desc = "Location List (Trouble)" },
         { "<leader>xQ",  desc = "Quickfix List (Trouble)" },
+
+        -- Utilities
+        { "<leader>N",   desc = "Neovim News" },
+        { "<c-/>",       desc = "Toggle terminal" },
+        { "<c-_>",       desc = "Toggle terminal" },
 
         -- LSP mappings
         { "gd",          desc = "Go to definition" },
@@ -215,6 +223,10 @@ return {
         { "t",           desc = "Jump till forward" },
         { "T",           desc = "Jump till backward" },
         { ";",           desc = "Repeat jump" },
+
+        -- Word navigation
+        { "]]",          desc = "Next Reference" },
+        { "[[",          desc = "Prev Reference" },
       })
     end,
   },

@@ -1,11 +1,11 @@
--- lua/plugins/snacks.lua
+-- lua/plugins/snacks.lua (Enhanced to replace toggleterm and mini.bufremove)
 return {
   {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
     opts = {
-      -- Enable specific snacks
+      -- Enable specific snacks (enhanced configuration)
       bigfile = { enabled = true },
       dashboard = { enabled = false }, -- We use alpha-nvim
       indent = { enabled = true },
@@ -15,25 +15,52 @@ return {
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+      terminal = { enabled = true }, -- Enhanced terminal support
+      lazygit = { enabled = true },
+      git = { enabled = true },
+      bufdelete = { enabled = true }, -- Replace mini.bufremove
       styles = {
         notification = {
-          wo = { wrap = true } -- Wrap notifications
-        }
+          wo = { wrap = true }
+        },
+        terminal = {
+          bo = {
+            filetype = "snacks_terminal",
+          },
+          wo = {},
+        },
       }
     },
     keys = {
-      { "<leader>un", function() Snacks.notifier.hide() end,           desc = "Dismiss All Notifications" },
-      { "<leader>bd", function() Snacks.bufdelete() end,               desc = "Delete Buffer" },
-      { "<leader>gg", function() Snacks.lazygit() end,                 desc = "Lazygit" },
-      { "<leader>gb", function() Snacks.git.blame_line() end,          desc = "Git Blame Line" },
-      { "<leader>gB", function() Snacks.gitbrowse() end,               desc = "Git Browse" },
-      { "<leader>gf", function() Snacks.lazygit.log_file() end,        desc = "Lazygit Current File History" },
-      { "<leader>gl", function() Snacks.lazygit.log() end,             desc = "Lazygit Log (cwd)" },
-      { "<leader>cR", function() Snacks.rename.rename_file() end,      desc = "Rename File" },
-      { "<c-/>",      function() Snacks.terminal() end,                desc = "Toggle Terminal" },
-      { "<c-_>",      function() Snacks.terminal() end,                desc = "Toggle Terminal" }, -- which-key workaround
-      { "]]",         function() Snacks.words.jump(vim.v.count1) end,  desc = "Next Reference",              mode = { "n", "t" } },
-      { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference",              mode = { "n", "t" } },
+      -- Notifications
+      { "<leader>un", function() Snacks.notifier.hide() end,                                                desc = "Dismiss All Notifications" },
+
+      -- Buffer management (replacing mini.bufremove)
+      { "<leader>bd", function() Snacks.bufdelete() end,                                                    desc = "Delete Buffer" },
+      { "<leader>bD", function() Snacks.bufdelete({ force = true }) end,                                    desc = "Delete Buffer (Force)" },
+
+      -- Git integration
+      { "<leader>gg", function() Snacks.lazygit() end,                                                      desc = "Lazygit" },
+      { "<leader>gb", function() Snacks.git.blame_line() end,                                               desc = "Git Blame Line" },
+      { "<leader>gB", function() Snacks.gitbrowse() end,                                                    desc = "Git Browse" },
+      { "<leader>gf", function() Snacks.lazygit.log_file() end,                                             desc = "Lazygit Current File History" },
+      { "<leader>gl", function() Snacks.lazygit.log() end,                                                  desc = "Lazygit Log (cwd)" },
+
+      -- File operations
+      { "<leader>cR", function() Snacks.rename.rename_file() end,                                           desc = "Rename File" },
+
+      -- Terminal (replacing toggleterm)
+      { "<leader>th", function() Snacks.terminal(nil, { win = { position = "bottom", height = 0.3 } }) end, desc = "Terminal Horizontal" },
+      { "<leader>tv", function() Snacks.terminal(nil, { win = { position = "right", width = 0.4 } }) end,   desc = "Terminal Vertical" },
+      { "<leader>tt", function() Snacks.terminal() end,                                                     desc = "Terminal Toggle" },
+      { "<c-/>",      function() Snacks.terminal() end,                                                     desc = "Toggle Terminal" },
+      { "<c-_>",      function() Snacks.terminal() end,                                                     desc = "Toggle Terminal" }, -- which-key workaround
+
+      -- Word navigation
+      { "]]",         function() Snacks.words.jump(vim.v.count1) end,                                       desc = "Next Reference",              mode = { "n", "t" } },
+      { "[[",         function() Snacks.words.jump(-vim.v.count1) end,                                      desc = "Prev Reference",              mode = { "n", "t" } },
+
+      -- Utilities
       {
         "<leader>N",
         desc = "Neovim News",

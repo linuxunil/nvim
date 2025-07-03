@@ -29,3 +29,19 @@ require("lazy").setup("plugins", {
   },
 })
 
+-- init.lua (add this after your existing configuration)
+
+-- Setup mise integration
+local mise_ok, mise = pcall(require, 'mise-integration')
+if mise_ok then
+  mise.setup_lsp_paths()
+  mise.setup_auto_activation()
+
+  -- Add keybindings for mise
+  vim.keymap.set('n', '<leader>mi', function() mise.show_info() end, { desc = 'Mise info' })
+  vim.keymap.set('n', '<leader>mr', function()
+    vim.ui.input({ prompt = 'Mise task: ' }, function(task)
+      if task then mise.run_task(task) end
+    end)
+  end, { desc = 'Run mise task' })
+end

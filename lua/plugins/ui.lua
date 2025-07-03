@@ -1,89 +1,38 @@
--- lua/plugins/ui.lua (Fixed with proper Catppuccin setup)
+-- lua/plugins/ui.lua (Consolidated UI configuration)
 return {
-  -- Catppuccin theme (Enhanced configuration)
+  -- Theme (loaded immediately)
   {
     "catppuccin/nvim",
     name = "catppuccin",
     priority = 1000,
+    lazy = false, -- Load immediately for UI
     opts = {
-      flavour = "frappe", -- mocha, macchiato, frappe, latte
-      background = {
-        light = "latte",
-        dark = "mocha",
-      },
+      flavour = "frappe",
+      background = { light = "latte", dark = "mocha" },
       transparent_background = false,
       show_end_of_buffer = false,
       term_colors = true,
-      dim_inactive = {
-        enabled = true,
-        shade = "dark",
-        percentage = 0.15,
-      },
-      no_italic = false,
-      no_bold = false,
-      no_underline = false,
+      dim_inactive = { enabled = true, shade = "dark", percentage = 0.15 },
       styles = {
         comments = { "italic" },
         conditionals = { "italic" },
-        loops = {},
-        functions = {},
-        keywords = {},
-        strings = {},
-        variables = {},
-        numbers = {},
-        booleans = {},
-        properties = {},
-        types = {},
-        operators = {},
       },
-      color_overrides = {},
-      custom_highlights = function(colors)
-        return {
-          -- Custom highlights for better visual separation
-          CursorLine = { bg = colors.surface0 },
-          Visual = { bg = colors.surface1, style = { "bold" } },
-          Search = { bg = colors.yellow, fg = colors.base },
-          IncSearch = { bg = colors.red, fg = colors.base },
-
-          -- Better telescope highlights
-          TelescopeSelection = { bg = colors.surface1 },
-          TelescopePromptBorder = { fg = colors.blue },
-          TelescopeResultsBorder = { fg = colors.lavender },
-          TelescopePreviewBorder = { fg = colors.green },
-
-          -- Enhanced mini.files highlights
-          MiniFilesBorder = { fg = colors.blue },
-          MiniFilesCursorLine = { bg = colors.surface1 },
-        }
-      end,
       integrations = {
         cmp = true,
         gitsigns = true,
-        nvimtree = false,
         treesitter = true,
         notify = true,
-        mini = {
-          enabled = true,
-          indentscope_color = "lavender",
-        },
-        telescope = {
-          enabled = true,
-          style = "nvchad",
-        },
+        mini = { enabled = true, indentscope_color = "lavender" },
+        telescope = { enabled = true, style = "nvchad" },
         lsp_trouble = true,
         which_key = true,
-        barbecue = false,
         mason = true,
         noice = true,
-        dap = {
-          enabled = true,
-          enable_ui = true,
-        },
+        dap = { enabled = true, enable_ui = true },
       },
     },
     config = function(_, opts)
       require("catppuccin").setup(opts)
-      -- Use the specific frappe variant
       vim.cmd.colorscheme("catppuccin-frappe")
     end,
   },
@@ -110,57 +59,23 @@ return {
         prompt_prefix = "   ",
         selection_caret = "  ",
         entry_prefix = "  ",
-        initial_mode = "insert",
-        selection_strategy = "reset",
         sorting_strategy = "ascending",
         layout_strategy = "horizontal",
         path_display = { "truncate" },
         file_ignore_patterns = { ".git/", "node_modules" },
-        winblend = 0,
-        border = {},
-        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-        color_devicons = true,
-        set_env = { ["COLORTERM"] = "truecolor" },
         layout_config = {
-          horizontal = {
-            prompt_position = "top",
-            preview_width = 0.55,
-            results_width = 0.8,
-          },
-          vertical = {
-            mirror = false,
-          },
+          horizontal = { prompt_position = "top", preview_width = 0.55 },
           width = 0.87,
           height = 0.80,
-          preview_cutoff = 120,
         },
       },
       pickers = {
-        find_files = {
-          theme = "dropdown",
-          previewer = false,
-          hidden = true,
-        },
-        buffers = {
-          theme = "dropdown",
-          previewer = false,
-          initial_mode = "normal",
-        },
-        git_files = {
-          theme = "dropdown",
-          previewer = false,
-        },
-        live_grep = {
-          theme = "ivy",
-        },
+        find_files = { theme = "dropdown", previewer = false, hidden = true },
+        buffers = { theme = "dropdown", previewer = false, initial_mode = "normal" },
+        live_grep = { theme = "ivy" },
       },
       extensions = {
-        fzf = {
-          fuzzy = true,
-          override_generic_sorter = true,
-          override_file_sorter = true,
-          case_mode = "smart_case",
-        },
+        fzf = { fuzzy = true, override_generic_sorter = true, case_mode = "smart_case" },
       },
     },
     config = function(_, opts)
@@ -169,80 +84,64 @@ return {
     end,
   },
 
-  -- Statusline
+  -- Statusline (loaded immediately for UI)
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "echasnovski/mini.icons" },
-    event = "VeryLazy",
-    opts = function()
-      local function fg(name)
-        local hl = vim.api.nvim_get_hl(0, { name = name })
-        local fg_color = hl and hl.fg
-        return fg_color and { fg = string.format("#%06x", fg_color) } or nil
-      end
-
-      return {
-        options = {
-          theme = "catppuccin",
-          globalstatus = true,
-          disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
-          component_separators = { left = "", right = "" },
-          section_separators = { left = "", right = "" },
+    lazy = false, -- Load immediately for UI
+    opts = {
+      options = {
+        theme = "catppuccin",
+        globalstatus = true,
+        disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
+        component_separators = { left = "", right = "" },
+        section_separators = { left = "", right = "" },
+      },
+      sections = {
+        lualine_a = { "mode" },
+        lualine_b = { "branch" },
+        lualine_c = {
+          {
+            "diagnostics",
+            symbols = { error = " ", warn = " ", info = " ", hint = " " },
+          },
+          { "filetype", icon_only = true, separator = "",                                            padding = { left = 1, right = 0 } },
+          { "filename", path = 1,         symbols = { modified = "  ", readonly = "", unnamed = "" } },
         },
-        sections = {
-          lualine_a = { "mode" },
-          lualine_b = { "branch" },
-          lualine_c = {
-            {
-              "diagnostics",
-              symbols = {
-                error = " ",
-                warn = " ",
-                info = " ",
-                hint = " ",
-              },
-            },
-            { "filetype", icon_only = true, separator = "",                                            padding = { left = 1, right = 0 } },
-            { "filename", path = 1,         symbols = { modified = "  ", readonly = "", unnamed = "" } },
-          },
-          lualine_x = {
-            {
-              function() return require("noice").api.status.command.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-              color = fg("Statement"),
-            },
-            {
-              function() return require("noice").api.status.mode.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-              color = fg("Constant"),
-            },
-            {
-              function() return "  " .. require("dap").status() end,
-              cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
-              color = fg("Debug"),
-            },
-            { "diff" },
-          },
-          lualine_y = {
-            { "progress", separator = " ",                  padding = { left = 1, right = 0 } },
-            { "location", padding = { left = 0, right = 1 } },
-          },
-          lualine_z = {
+        lualine_x = {
+          {
             function()
-              return " " .. os.date("%R")
+              return package.loaded["noice"] and require("noice").api.status.command.has()
+                  and require("noice").api.status.command.get() or ""
             end,
+            cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
+            color = { fg = "#f38ba8" },
           },
+          {
+            function()
+              return package.loaded["dap"] and require("dap").status() ~= ""
+                  and "  " .. require("dap").status() or ""
+            end,
+            cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
+            color = { fg = "#94e2d5" },
+          },
+          { "diff" },
         },
-        extensions = { "neo-tree", "lazy" },
-      }
-    end,
+        lualine_y = {
+          { "progress", separator = " ",                  padding = { left = 1, right = 0 } },
+          { "location", padding = { left = 0, right = 1 } },
+        },
+        lualine_z = { function() return " " .. os.date("%R") end },
+      },
+      extensions = { "lazy" },
+    },
   },
 
-  -- Bufferline
+  -- Bufferline (loaded immediately for UI)
   {
     "akinsho/bufferline.nvim",
     dependencies = { "echasnovski/mini.icons" },
-    event = "VeryLazy",
+    lazy = false, -- Load immediately for UI
     keys = {
       { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>",            desc = "Toggle pin" },
       { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
@@ -251,49 +150,30 @@ return {
       { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>",            desc = "Delete buffers to the left" },
       { "<S-h>",      "<cmd>BufferLineCyclePrev<cr>",            desc = "Prev buffer" },
       { "<S-l>",      "<cmd>BufferLineCycleNext<cr>",            desc = "Next buffer" },
-      { "[b",         "<cmd>BufferLineCyclePrev<cr>",            desc = "Prev buffer" },
-      { "]b",         "<cmd>BufferLineCycleNext<cr>",            desc = "Next buffer" },
     },
     opts = {
       options = {
-        close_command = function(n) require("mini.bufremove").delete(n, false) end,
-        right_mouse_command = function(n) require("mini.bufremove").delete(n, false) end,
+        close_command = function(n) require("snacks").bufdelete(n) end,
+        right_mouse_command = function(n) require("snacks").bufdelete(n) end,
         diagnostics = "nvim_lsp",
         always_show_bufferline = false,
         diagnostics_indicator = function(_, _, diag)
           local icons = { Error = " ", Warn = " ", Info = " " }
-          local ret = (diag.error and icons.Error .. diag.error .. " " or "")
+          return (diag.error and icons.Error .. diag.error .. " " or "")
               .. (diag.warning and icons.Warn .. diag.warning or "")
-          return vim.trim(ret)
         end,
         offsets = {
-          {
-            filetype = "neo-tree",
-            text = "Neo-tree",
-            highlight = "Directory",
-            text_align = "left",
-          },
+          { filetype = "mini.files", text = "File Explorer", highlight = "Directory", text_align = "left" },
         },
       },
     },
-    config = function(_, opts)
-      require("bufferline").setup(opts)
-      -- Fix bufferline when restoring a session
-      vim.api.nvim_create_autocmd("BufAdd", {
-        callback = function()
-          vim.schedule(function()
-            pcall(nvim_bufferline)
-          end)
-        end,
-      })
-    end,
   },
 
-  -- Notifications
+  -- Notifications (loaded immediately for UI)
   {
     "folke/noice.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },
-    event = "VeryLazy",
+    lazy = false, -- Load immediately for UI
     opts = {
       lsp = {
         override = {
@@ -325,37 +205,22 @@ return {
     },
   },
 
-  -- Treesitter for syntax highlighting
+  -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-    },
+    dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
     opts = {
       ensure_installed = {
-        -- Core
         "bash", "c", "lua", "vim", "vimdoc", "query", "regex",
-        -- Web technologies
         "html", "css", "javascript", "typescript", "tsx", "json", "jsonc",
-        -- Programming languages
         "python", "go", "zig", "rust", "java", "cpp",
-        -- Data and config
         "yaml", "toml", "xml", "ini", "dockerfile", "gitignore", "gitcommit",
-        -- Documentation
-        "markdown", "markdown_inline",
-        -- Database
-        "sql",
+        "markdown", "markdown_inline", "sql",
       },
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-      },
-      indent = {
-        enable = true,
-        disable = { "python" }, -- Python indentation can be tricky with treesitter
-      },
+      highlight = { enable = true, additional_vim_regex_highlighting = false },
+      indent = { enable = true, disable = { "python" } },
       incremental_selection = {
         enable = true,
         keymaps = {
@@ -381,27 +246,185 @@ return {
         move = {
           enable = true,
           set_jumps = true,
-          goto_next_start = {
-            ["]f"] = "@function.outer",
-            ["]c"] = "@class.outer",
-          },
-          goto_next_end = {
-            ["]F"] = "@function.outer",
-            ["]C"] = "@class.outer",
-          },
-          goto_previous_start = {
-            ["[f"] = "@function.outer",
-            ["[c"] = "@class.outer",
-          },
-          goto_previous_end = {
-            ["[F"] = "@function.outer",
-            ["[C"] = "@class.outer",
-          },
+          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
+          goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
+          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
+          goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
         },
       },
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+    end,
+  },
+
+  -- Visual Enhancements
+  {
+    "karb94/neoscroll.nvim",
+    lazy = false, -- Load immediately for smooth scrolling
+    opts = {
+      mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-y>", "<C-e>", "zt", "zz", "zb" },
+      hide_cursor = true,
+      easing_function = "quadratic",
+    },
+  },
+
+  {
+    "RRethy/vim-illuminate",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      delay = 200,
+      large_file_cutoff = 2000,
+      large_file_overrides = { providers = { "lsp" } },
+    },
+    config = function(_, opts)
+      require("illuminate").configure(opts)
+
+      local function map(key, dir)
+        vim.keymap.set("n", key, function()
+          require("illuminate")["goto_" .. dir .. "_reference"](false)
+        end, { desc = dir:sub(1, 1):upper() .. dir:sub(2) .. " Reference" })
+      end
+
+      map("]]", "next")
+      map("[[", "prev")
+    end,
+  },
+
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = "kevinhwang91/promise-async",
+    event = "BufReadPost",
+    opts = {
+      provider_selector = function() return { "treesitter", "indent" } end,
+    },
+    config = function(_, opts)
+      require("ufo").setup(opts)
+      vim.o.foldcolumn = "1"
+      vim.o.foldlevel = 99
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
+      vim.o.fillchars = "eob: ,fold: ,foldopen:▾,foldsep: ,foldclose:▸"
+    end,
+  },
+
+  {
+    "norcalli/nvim-colorizer.lua",
+    event = "BufReadPre",
+    config = function()
+      require("colorizer").setup({
+        "*",
+        css = { rgb_fn = true },
+        html = { names = false },
+      })
+    end,
+  },
+
+  {
+    "folke/trouble.nvim",
+    dependencies = { "echasnovski/mini.icons" },
+    keys = {
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>",                        desc = "Diagnostics (Trouble)" },
+      { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",           desc = "Buffer Diagnostics (Trouble)" },
+      { "<leader>cs", "<cmd>Trouble symbols toggle focus=false<cr>",                desc = "Symbols (Trouble)" },
+      { "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", desc = "LSP Definitions/references (Trouble)" },
+      { "<leader>xL", "<cmd>Trouble loclist toggle<cr>",                            desc = "Location List (Trouble)" },
+      { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>",                             desc = "Quickfix List (Trouble)" },
+    },
+    opts = {
+      modes = {
+        lsp_references = { params = { include_declaration = false } },
+      },
+    },
+  },
+
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    lazy = false, -- Load immediately for visual guides
+    main = "ibl",
+    opts = {
+      indent = { char = "│", tab_char = "│" },
+      scope = { enabled = false },
+      exclude = {
+        filetypes = {
+          "help", "alpha", "dashboard", "neo-tree", "Trouble", "trouble",
+          "lazy", "mason", "notify", "toggleterm", "lazyterm",
+        },
+      },
+    },
+  },
+
+  {
+    "folke/zen-mode.nvim",
+    keys = { { "<leader>zm", "<cmd>ZenMode<cr>", desc = "Zen Mode" } },
+    opts = {
+      window = {
+        backdrop = 0.95,
+        width = 120,
+        height = 1,
+        options = {
+          signcolumn = "no",
+          number = false,
+          relativenumber = false,
+          cursorline = false,
+          cursorcolumn = false,
+          foldcolumn = "0",
+          list = false,
+        },
+      },
+      plugins = {
+        options = { enabled = true, ruler = false, showcmd = false, laststatus = 0 },
+        twilight = { enabled = true },
+        gitsigns = { enabled = false },
+      },
+    },
+  },
+
+  {
+    "folke/twilight.nvim",
+    opts = {
+      dimming = { alpha = 0.25, color = { "Normal", "#ffffff" }, inactive = false },
+      context = 10,
+      treesitter = true,
+      expand = { "function", "method", "table", "if_statement" },
+    },
+  },
+
+  {
+    "goolord/alpha-nvim",
+    lazy = false,   -- Load immediately for dashboard
+    priority = 999, -- Load after catppuccin
+    config = function()
+      local alpha = require("alpha")
+      local dashboard = require("alpha.themes.dashboard")
+
+      dashboard.section.header.val = {
+        "                                                     ",
+        "  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+        "  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+        "  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+        "  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+        "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+        "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+        "                                                     ",
+      }
+
+      dashboard.section.buttons.val = {
+        dashboard.button("f", " " .. " Find file", ":Telescope find_files <CR>"),
+        dashboard.button("n", " " .. " New file", ":ene <BAR> startinsert <CR>"),
+        dashboard.button("r", " " .. " Recent files", ":Telescope oldfiles <CR>"),
+        dashboard.button("g", " " .. " Find text", ":Telescope live_grep <CR>"),
+        dashboard.button("c", " " .. " Config", ":e $MYVIMRC <CR>"),
+        dashboard.button("l", "󰒲 " .. " Lazy", ":Lazy<CR>"),
+        dashboard.button("q", " " .. " Quit", ":qa<CR>"),
+      }
+
+      dashboard.section.footer.val = "Don't Stop Until You are Proud..."
+      dashboard.section.footer.opts.hl = "Type"
+      dashboard.section.header.opts.hl = "Include"
+      dashboard.section.buttons.opts.hl = "Keyword"
+
+      alpha.setup(dashboard.opts)
     end,
   },
 }

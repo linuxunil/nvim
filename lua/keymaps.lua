@@ -1,4 +1,4 @@
--- lua/keymaps.lua (Enhanced with Zig and Go support)
+-- lua/keymaps.lua (Optimized with conflict resolution)
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
@@ -41,11 +41,7 @@ map("n", "<leader>fr", "<cmd>Telescope oldfiles<CR>", { desc = "Recent files" })
 map("n", "<leader>fc", "<cmd>Telescope colorscheme<CR>", { desc = "Colorscheme" })
 map("n", "<leader>fk", "<cmd>Telescope keymaps<CR>", { desc = "Keymaps" })
 
--- File explorer (now handled by mini.files plugin)
--- No keymap here - handled in mini.lua
-
--- Buffer management (now handled by mini.bufremove plugin)
--- No keymaps here - handled in mini.lua
+-- Buffer management (using snacks.nvim)
 map("n", "<S-h>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Prev buffer" })
 map("n", "<S-l>", "<cmd>BufferLineCycleNext<CR>", { desc = "Next buffer" })
 
@@ -66,17 +62,23 @@ map("n", "<leader>cf", function()
   require("conform").format({ lsp_fallback = true })
 end, { desc = "Format buffer" })
 
--- Refactoring
-map({ "n", "v" }, "<leader>rr", function()
-  require("refactoring").select_refactor()
-end, { desc = "Refactor" })
+-- Git (resolved conflicts - moved Go to <leader>G*)
+map("n", "<leader>gb", function() require("snacks").git.blame_line() end, { desc = "Git blame line" })
+map("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<CR>", { desc = "Preview hunk" })
+map("n", "<leader>gR", "<cmd>Gitsigns reset_hunk<CR>", { desc = "Reset hunk" })
+map("n", "]g", "<cmd>Gitsigns next_hunk<CR>", { desc = "Next git hunk" })
+map("n", "[g", "<cmd>Gitsigns prev_hunk<CR>", { desc = "Previous git hunk" })
 
--- Terminal
-map("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<CR>", { desc = "Terminal horizontal" })
-map("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<CR>", { desc = "Terminal vertical" })
-map("n", "<leader>tf", "<cmd>ToggleTerm direction=float<CR>", { desc = "Terminal float" })
+-- Go development (moved to <leader>G* to resolve conflicts)
+map("n", "<leader>Gr", "<cmd>GoRun<CR>", { desc = "Run Go file" })
+map("n", "<leader>Gt", "<cmd>GoTest<CR>", { desc = "Test Go package" })
+map("n", "<leader>GT", "<cmd>GoTestFunc<CR>", { desc = "Test Go function" })
+map("n", "<leader>Gb", "<cmd>GoBuild<CR>", { desc = "Build Go project" })
+map("n", "<leader>Gf", "<cmd>GoFmt<CR>", { desc = "Format Go file" })
+map("n", "<leader>Gi", "<cmd>GoImports<CR>", { desc = "Go imports" })
+map("n", "<leader>Gc", "<cmd>GoCoverage<CR>", { desc = "Go coverage" })
 
--- Python development keymaps
+-- Python development
 map("n", "<leader>pr", "<cmd>!uv run %<CR>", { desc = "Run Python file with UV" })
 map("n", "<leader>pt", "<cmd>!uv run pytest<CR>", { desc = "Run tests with UV" })
 map("n", "<leader>pi", "<cmd>!uv add ", { desc = "Install package with UV" })
@@ -85,25 +87,17 @@ map("n", "<leader>pv", "<cmd>!uv venv<CR>", { desc = "Create virtual environment
 map("n", "<leader>pc", "<cmd>!uv run ruff check .<CR>", { desc = "Check code with Ruff" })
 map("n", "<leader>pf", "<cmd>!uv run ruff format .<CR>", { desc = "Format code with Ruff" })
 
--- Go development keymaps (Note: These are handled in go.lua plugin)
--- But adding direct keymaps for convenience
-map("n", "<leader>gr", "<cmd>GoRun<CR>", { desc = "Run Go file" })
-map("n", "<leader>gt", "<cmd>GoTest<CR>", { desc = "Test Go package" })
-map("n", "<leader>gb", "<cmd>GoBuild<CR>", { desc = "Build Go project" })
-map("n", "<leader>gf", "<cmd>GoFmt<CR>", { desc = "Format Go file" })
-map("n", "<leader>gi", "<cmd>GoImports<CR>", { desc = "Go imports" })
-
--- Zig development keymaps
+-- Zig development
 map("n", "<leader>zr", "<cmd>ZigRun<CR>", { desc = "Run Zig file" })
 map("n", "<leader>zt", "<cmd>ZigTest<CR>", { desc = "Test Zig file" })
 map("n", "<leader>zb", "<cmd>ZigBuild<CR>", { desc = "Build Zig project" })
 map("n", "<leader>zf", "<cmd>ZigFmt<CR>", { desc = "Format Zig file" })
 map("n", "<leader>zc", "<cmd>ZigCheck<CR>", { desc = "Check Zig file" })
 
--- Git
-map("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "LazyGit" })
-map("n", "<leader>gb", "<cmd>Gitsigns blame_line<CR>", { desc = "Git blame line" })
-map("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<CR>", { desc = "Preview hunk" })
-map("n", "<leader>gR", "<cmd>Gitsigns reset_hunk<CR>", { desc = "Reset hunk" })
-map("n", "]g", "<cmd>Gitsigns next_hunk<CR>", { desc = "Next git hunk" })
-map("n", "[g", "<cmd>Gitsigns prev_hunk<CR>", { desc = "Previous git hunk" })
+-- Terminal (using snacks.nvim exclusively, resolved conflicts)
+map("n", "<leader>th", function() require("snacks").terminal() end, { desc = "Terminal horizontal" })
+map("n", "<leader>tv", function() require("snacks").terminal() end, { desc = "Terminal vertical" })
+map("n", "<leader>tt", function() require("snacks").terminal() end, { desc = "Terminal toggle" })
+
+-- Test (resolved <leader>tf conflict - moved to <leader>tT)
+map("n", "<leader>tT", function() require("neotest").run.run(vim.fn.expand("%")) end, { desc = "Run file tests" })
