@@ -2,6 +2,7 @@
 require("settings")
 require("keymaps")
 require("autocmds")
+require("mise-integragion")
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -29,7 +30,6 @@ require("lazy").setup("plugins", {
   },
 })
 
--- init.lua (add this after your existing configuration)
 
 -- Setup mise integration
 local mise_ok, mise = pcall(require, 'mise-integration')
